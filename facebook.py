@@ -6,6 +6,7 @@ import codecs
 import csv
 import sys
 import time
+from getpass import getpass
 from configparser import ConfigParser
 from urllib.parse import urlparse
 
@@ -29,8 +30,9 @@ class FacebookBot:
             self.login_username = config['SETTINGS']['Username']
             self.login_password = config['SETTINGS']['Password']
         except KeyError:
-            print('Config file not configured properly!')
-            sys.exit()
+            print('Credentials not found in config file!\nEnter your credentials manually...\n')
+            self.login_username = input('Enter your Facebook username: ')
+            self.login_password = getpass('Enter your Facebook password: ')
 
         self.driver = start_webdriver('Chrome')
 
@@ -101,16 +103,12 @@ class FacebookBot:
     def execute(self):
 
         self.facebook_login()
-        with open('profiles.csv', mode='r') as f:
-            profiles_csv = csv.reader(f)
-
-            for row in profiles_csv:
-                url = row[0]
-                if not url[-1] == '/':
-                    url += '/'
-                self.profile_url = url
-                self.scrape_friends()
-                self.save_data()
+        url = input('Enter the URL of target Facebook profile: ')
+        if not url[-1] == '/':
+            url += '/'
+        self.profile_url = url
+        self.scrape_friends()
+        self.save_data()
         print('All tasks done!')
 
 
