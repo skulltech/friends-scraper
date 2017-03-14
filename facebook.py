@@ -34,6 +34,9 @@ class FacebookBot:
             self.login_username = input('Enter your Facebook username: ')
             self.login_password = getpass('Enter your Facebook password: ')
 
+        self.profile_url = input('Enter the URL of target Facebook profile: ')
+        if not self.profile_url[-1] == '/': self.profile_url += '/'
+        
         self.driver = start_webdriver('Chrome')
 
     def facebook_login(self):
@@ -103,10 +106,6 @@ class FacebookBot:
     def execute(self):
 
         self.facebook_login()
-        url = input('Enter the URL of target Facebook profile: ')
-        if not url[-1] == '/':
-            url += '/'
-        self.profile_url = url
         self.scrape_friends()
         self.save_data()
         print('All tasks done!')
