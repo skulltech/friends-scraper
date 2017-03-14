@@ -1,4 +1,6 @@
-##    Scrapes the list of Friends of a given Facebook account and saves them in a .csv file. [Refer to README.txt]
+'''
+Scrapes the list of Friends of a given Facebook account and saves them in a .csv file.
+'''
 
 import codecs
 import csv
@@ -8,6 +10,7 @@ from configparser import ConfigParser
 from urllib.parse import urlparse
 
 from lxml import html
+from wdstart import start_webdriver
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -29,7 +32,7 @@ class FacebookBot:
             print('Config file not configured properly!')
             sys.exit()
 
-        self.driver = webdriver.Chrome()
+        self.driver = start_webdriver('Chrome')
 
     def facebook_login(self):
         self.driver.get('http://www.facebook.com')
