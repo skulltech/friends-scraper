@@ -93,7 +93,7 @@ class FacebookBot:
 
             for i in range(len(self.data[0])):
                 output_writer.writerow(
-                        [self.id, self.username, self.name, self.data[0][i], self.data[1][i], self.data[2][i]])
+                        [self.data[0][i], self.data[1][i], self.data[2][i]])
 
     def execute(self):
 
