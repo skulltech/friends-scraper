@@ -89,4 +89,4 @@ ENV/
 .ropeproject
 
 # Webdrivers
-chromedriver.exe
+webdrivers/
