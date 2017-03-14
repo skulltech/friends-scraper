@@ -108,7 +108,7 @@ class FacebookBot:
         self.facebook_login()
         self.scrape_friends()
         self.save_data()
-        print('All tasks done!')
+        print('[*] List of friends saved as {}.csv'.format(self.username))
 
 
 bot = FacebookBot()
