@@ -27,15 +27,15 @@ class FacebookBot:
             print('Config file not available!')
             sys.exit()
         try:
-            self.login_username = config['SETTINGS']['Username']
-            self.login_password = config['SETTINGS']['Password']
+            self.fbusername = config['SETTINGS']['Username']
+            self.fbpassword = config['SETTINGS']['Password']
         except KeyError:
             print('Credentials not found in config file!\nEnter your credentials manually...\n')
-            self.login_username = input('Enter your Facebook username: ')
-            self.login_password = getpass('Enter your Facebook password: ')
+            self.fbusername = input('Enter your Facebook username: ')
+            self.fbpassword = getpass('Enter your Facebook password: ')
 
-        self.profile_url = input('Enter the URL of target Facebook profile: ')
-        if not self.profile_url[-1] == '/': self.profile_url += '/'
+        self.targeturl = input('Enter the URL of target Facebook profile: ')
+        if not self.targeturl[-1] == '/': self.targeturl += '/'
         
         self.driver = start_webdriver('Chrome')
 
@@ -45,8 +45,8 @@ class FacebookBot:
 
         email = self.driver.find_element_by_name('email')
         pas = self.driver.find_element_by_name('pass')
-        email.send_keys(self.login_username)
-        pas.send_keys(self.login_password)
+        email.send_keys(self.fbusername)
+        pas.send_keys(self.fbpassword)
         email.submit()
 
     def filter_url(self, x):
@@ -56,16 +56,14 @@ class FacebookBot:
         return elem
 
     def scrape_friends(self):
-        self.driver.get(self.profile_url)
+        self.driver.get(self.targeturl)
         self.name = self.driver.title
-        self.id = \
-            html.fromstring(self.driver.page_source.encode('utf-8')).xpath(
-                    '//meta[@property="al:android:url"]/@content')[
-                0][13:]
+        self.id = html.fromstring(self.driver.page_source.encode('utf-8')).xpath(
+                    '//meta[@property="al:android:url"]/@content')[0][13:]
         self.username = self.filter_url(bot.driver.current_url)
 
         
-        self.driver.get(self.profile_url + 'friends/')
+        self.driver.get(self.targeturl + 'friends/')
         body = self.driver.find_element_by_tag_name('body')
 
         self.scroll(body)
@@ -97,10 +95,10 @@ class FacebookBot:
 
     def save_data(self):
         with codecs.open(self.username + '.csv', mode='w', encoding='utf-8') as f:
-            output_writer = csv.writer(f)
+            csvwriter = csv.writer(f)
 
             for i in range(len(self.data[0])):
-                output_writer.writerow(
+                csvwriter.writerow(
                         [self.data[0][i], self.data[1][i], self.data[2][i]])
 
     def execute(self):
